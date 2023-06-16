@@ -1,0 +1,113 @@
+#include <iostream>
+#include <string>
+
+struct Man {
+    std::string surname;
+    std::string name;
+    int age;
+    std::string dateOfBirth;
+};
+
+Man mans[100];
+int mansCount = 0;
+
+void addMan(const Man& man) {
+    mans[mansCount++] = man;
+}
+
+void removeMan(int index) {
+    if (index >= 0 && index < mansCount) {
+        for (int i = index; i < mansCount - 1; i++) {
+            mans[i] = mans[i + 1];
+        }
+        mansCount--;
+    }
+}
+
+void sortBySurname() {
+    SetConsoleOutputCP(1251);
+    for (int i = 0; i < mansCount - 1; i++) {
+        for (int j = 0; j < mansCount - i - 1; j++) {
+            if (mans[j].surname > mans[j + 1].surname) {
+                std::swap(mans[j], mans[j + 1]);
+            }
+        }
+    }
+}
+
+void sortByName() {
+    for (int i = 0; i < mansCount - 1; i++) {
+        for (int j = 0; j < mansCount - i - 1; j++) {
+            if (mans[j].name > mans[j + 1].name) {
+                std::swap(mans[j], mans[j + 1]);
+            }
+        }
+    }
+}
+
+void displayBirthdaysOfMonth(const std::string& month) {
+    for (int i = 0; i < mansCount; i++) {
+        std::string manMonth = mans[i].dateOfBirth.substr(3, 2);
+        if (manMonth == month) {
+            std::cout << mans[i].name << " " << mans[i].surname << " - " << mans[i].dateOfBirth << std::endl;
+        }
+    }
+}
+
+int findManBySurname(const std::string& surname) {
+    for (int i = 0; i < mansCount; i++) {
+        if (mans[i].surname == surname) {
+            return i;
+        }
+    }
+    return -1;  
+}
+
+int findManByName(const std::string& name) {
+    for (int i = 0; i < mansCount; i++) {
+        if (mans[i].name == name) {
+            return i;
+        }
+    }
+    return -1;  
+}
+
+void editMan(int index, const Man& newMan) {
+    if (index >= 0 && index < mansCount) {
+        mans[index] = newMan;
+    }
+}
+
+int main() {
+    Man man1 = { "Ivanov", "Ivan", 25, "05.10.1998" };
+    Man man2 = { "Petrov", "Petro", 30, "12.03.1993" };
+    Man man3 = { "Sidorov", "Sidor", 35, "17.07.1988" };
+
+    addMan(man1);
+    addMan(man2);
+    addMan(man3);
+
+    sortBySurname();
+
+    for (int i = 0; i < mansCount; i++) {
+        std::cout << mans[i].surname << " " << mans[i].name << " - " << mans[i].age << " років" << std::endl;
+    }
+
+    std::cout << "\nІменинники у червні:" << std::endl;
+    displayBirthdaysOfMonth("06");
+
+    std::cout << "\nПошук за прізвищем Petrov:" << std::endl;
+    int index = findManBySurname("Petrov");
+    if (index != -1) {
+        std::cout << mans[index].surname << " " << mans[index].name << " - " << mans[index].age << " років" << std::endl;
+    } else {
+        std::cout << "Запис не знайдено" << std::endl;
+    }
+
+    Man man4 = { "Kovalenko", "Oleksandr", 40, "20.11.1982" };
+    addMan(man4);
+
+    removeMan(1);
+
+    return 0;
+}
