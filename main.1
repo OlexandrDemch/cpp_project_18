@@ -1,0 +1,57 @@
+#include <iostream>
+
+struct Student {
+    std::string surname;
+    std::string group;
+    int performance[5];
+};
+
+void printHonorStudents(Student* students, int size) {
+    std::cout << "Honor students:\n";
+    for (int i = 0; i < size; ++i) {
+        int excellentCount = 0;
+        for (int j = 0; j < 5; ++j) {
+            if (students[i].performance[j] >= 75) {
+                excellentCount++;
+            }
+        }
+        double excellentPercentage = (static_cast<double>(excellentCount) / 5) * 100;
+        if (excellentPercentage > 75) {
+            std::cout << students[i].surname << " (Group: " << students[i].group << ")\n";
+        }
+    }
+}
+
+void printLowPerformers(Student* students, int size) {
+    std::cout << "Low performers:\n";
+    for (int i = 0; i < size; ++i) {
+        int lowCount = 0;
+        for (int j = 0; j < 5; ++j) {
+            if (students[i].performance[j] <= 50) {
+                lowCount++;
+            }
+        }
+        double lowPercentage = (static_cast<double>(lowCount) / 5) * 100;
+        if (lowPercentage > 50) {
+            std::cout << students[i].surname << " (Group: " << students[i].group << ")\n";
+        }
+    }
+}
+
+int main() {
+    int maxSize = 10; 
+    int currentSize = 0; 
+    Student* students = new Student[maxSize]; 
+
+    students[currentSize++] = {"Ivanov", "Group 1", {80, 90, 85, 70, 95}};
+    students[currentSize++] = {"Petrov", "Group 2", {60, 50, 70, 65, 75}};
+    students[currentSize++] = {"Sidorov", "Group 1", {90, 80, 75, 85, 95}};
+
+    printHonorStudents(students, currentSize);
+
+    printLowPerformers(students, currentSize);
+
+    delete[] students; 
+
+    return 0;
+}
